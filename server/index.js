@@ -20,20 +20,9 @@ app.post('/repos', function (req, res) {
   // and get the repo information from the github API, then
   // save the repo information in the database
   github.getReposByUsername(req.body, (data) => {
-    var array = JSON.parse(data);
-    var cleanData = [];
+    var data = JSON.parse(data);
     
-    array.forEach((repo) => {
-      cleanRepo = {
-        owner: repo.owner.login,
-        repo_name: repo.name,
-        forks_count: repo.forks_count,
-        url: repo.html_url
-      }
-      cleanData.push(cleanRepo);
-    });
-
-    mongo.save(cleanData, (err) => {
+    mongo.save(data, (err) => {
       if (err) {
         console.log(err);
       } else {
@@ -44,8 +33,9 @@ app.post('/repos', function (req, res) {
 });
 
 app.get('/repos', function (req, res) {
-  // TODO - your code here!
-  // This route should send back the top 25 repos
+  mongo.getTop25((err, data) => {
+    res.send(data);
+  })
 });
 
 let port = 1128;

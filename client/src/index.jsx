@@ -13,14 +13,20 @@ class App extends React.Component {
 
   }
 
+  componentDidMount() {
+    this.getTop25();
+  }
+
   search (term) {
-    console.log(`${term} was searched`);
+    var context = this;
+
     $.ajax({
       url: 'http://127.0.0.1:1128/repos',
       method: 'POST',
       contentType: 'text/plain',
       data: term,
       success: function(data) {
+        context.getTop25();
         console.log('Saved in Database!');
       },
       error: function(data) {
@@ -29,12 +35,30 @@ class App extends React.Component {
     })
   }
 
+  getTop25 () {
+    var context = this;
+    $.ajax({
+      url: 'http://127.0.0.1:1128/repos',
+      method: 'GET',
+      success: function(data) {
+        context.setState({
+          repos: data
+        })
+      },
+      error: function(data) {
+        console.log('error:', data);
+      }
+    })
+  }
+
   render () {
-    return (<div>
+    return (
+    <div id="main">
       <h1>Github Fetcher</h1>
       <RepoList repos={this.state.repos}/>
       <Search onSearch={this.search.bind(this)}/>
-    </div>)
+    </div>
+    )
   }
 }
 

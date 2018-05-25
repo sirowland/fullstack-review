@@ -19,11 +19,18 @@ class Search extends React.Component {
   }
 
   render() {
-    return (<div>
-      <h4>Add more repos!</h4>
-      Enter a github username: <input value={this.state.term} onChange={(e) => {this.onChange(e)}}/>       
-      <button onClick={() => {this.search()}}> Add Repos </button>
-    </div>) 
+    return (
+      <div id="search">
+        <h4>Add more repos!</h4>
+        Enter a github username: <input value={this.state.term} onChange={(e) => {this.onChange(e)}}/>       
+        <button onClick={() => {
+          this.search()
+          this.setState({
+            term: ''
+          });
+          }}> Add Repos </button>
+      </div>
+    ) 
   }
 }
 
